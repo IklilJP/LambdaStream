@@ -83,7 +83,25 @@ public class Main {
                 });
         System.out.println();
 
+        List<Outlet> totalPerOutlet = outletList.stream()
+                .collect(Collectors.groupingBy(Outlet::getOutlet))
+                .values()
+                .stream()
+                .map(list -> {
+                    int totalOmset = list.stream()
+                            .mapToInt(Outlet::getOmset)
+                            .sum();
+                    int totalTrx = list.stream()
+                            .mapToInt(Outlet::getTotalTrx)
+                            .sum();
+                    return new Outlet(list.get(0).getOutlet(), list.get(0).getPeriod(), totalOmset, totalTrx);
+                })
+                .toList();
+        totalPerOutlet.forEach(System.out::println);
+        System.out.println();
+
         //5. berapakah total omset dan total transaki yang terjadi
+
         int totalOmset = outletList.stream()
                 .mapToInt(Outlet::getOmset)
                 .sum();
